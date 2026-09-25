@@ -1,0 +1,32 @@
+{
+    "editor.formatOnSave": false,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "terminal.integrated.env.windows": {
+        "PYTHONIOENCODING": "utf-8"
+    },
+    "python.defaultInterpreterPath": "C:\\Program Files\\Python312\\python.exe",
+    "[javascript]": {
+        "editor.defaultFormatter": null
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": null
+    },
+    "files.associations": {
+        "*.jsx": "javascriptreact"
+    },
+    "emmet.includeLanguages": {
+        "javascriptreact": "html"
+    },
+    "javascript.validate.enable": false,
+    "js/ts.implicitProjectConfig.experimentalDecorators": true,
+    "search.exclude": {
+        "src/appBundle.jsx": true,
+        "index.html": true
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    }
+}

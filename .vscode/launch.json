@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run HMS App (run.py)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/run.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONIOENCODING": "utf-8"
+            },
+            "justMyCode": true
+        },
+        {
+            "name": "Build Bundle (build_bundle.py)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_bundle.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONIOENCODING": "utf-8"
+            },
+            "justMyCode": true
+        },
+        {
+            "name": "Rebuild index.html (rebuild_index.py)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/rebuild_index.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONIOENCODING": "utf-8"
+            },
+            "justMyCode": true
+        },
+        {
+            "name": "Health Check (check_health.py)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/check_health.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONIOENCODING": "utf-8"
+            },
+            "justMyCode": true
+        }
+    ]
+}

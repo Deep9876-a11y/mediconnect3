@@ -1,0 +1,48 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "▶ Start HMS Server",
+            "type": "shell",
+            "command": "python run.py",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": { "PYTHONIOENCODING": "utf-8" }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": {
+                "pattern": { "regexp": "^$" },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*",
+                    "endsPattern": ".*"
+                }
+            }
+        },
+        {
+            "label": "🔨 Build + Embed Bundle",
+            "type": "shell",
+            "command": "python build_bundle.py ; python rebuild_index.py",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": { "PYTHONIOENCODING": "utf-8" }
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
