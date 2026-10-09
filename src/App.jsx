@@ -8,6 +8,7 @@ import { LoginPage } from './components/LoginPage.jsx';
 import { PatientPortal } from './portals/patient/PatientPortal.jsx';
 import { DoctorPortal } from './portals/doctor/DoctorPortal.jsx';
 import { AdminPortal } from './portals/admin/AdminPortal.jsx';
+import { ReceptionistPortal } from './portals/receptionist/ReceptionistPortal.jsx';
 import { DoctorSharedEhrView } from './portals/shared/DoctorSharedEhrView.jsx';
 import { CloudDatabaseModal } from './components/CloudDatabaseModal.jsx';
 
@@ -257,6 +258,9 @@ export function App() {
     return false;
   });
 
+  const activeReceptionistDoctorId = authSession?.user?.assignedDoctorId || 'doc-1';
+  const isolatedReceptionistAppointments = appointments.filter(a => a.doctorId === activeReceptionistDoctorId);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans antialiased">
       {/* Persistent Global Header with Role Switcher */}
@@ -329,6 +333,17 @@ export function App() {
             onUpdateDoctor={handleUpdateDoctor}
             onAddDepartment={handleAddDepartment}
             showToast={showToast}
+          />
+        )}
+
+        {activeRole === 'receptionist' && (
+          <ReceptionistPortal
+            appointments={isolatedReceptionistAppointments}
+            doctors={doctors}
+            onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
+            onBookAppointment={handleBookAppointment}
+            showToast={showToast}
+            authUser={authSession?.user}
           />
         )}
       </div>

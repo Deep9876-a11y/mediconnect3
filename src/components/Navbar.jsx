@@ -21,8 +21,9 @@ export function Navbar({ activeRole, setRole, onOpenRoleModal, onOpenAiModal, on
   const roleBadge = {
     patient: { label: 'Patient', color: 'bg-teal-600', dot: 'bg-teal-500' },
     doctor:  { label: 'Doctor',  color: 'bg-sky-600',  dot: 'bg-sky-500'  },
-    admin:   { label: 'Admin',   color: 'bg-indigo-600', dot: 'bg-indigo-500' }
-  }[activeRole];
+    admin:   { label: 'Admin',   color: 'bg-indigo-600', dot: 'bg-indigo-500' },
+    receptionist: { label: 'Receptionist', color: 'bg-fuchsia-600', dot: 'bg-fuchsia-500' }
+  }[activeRole] || { label: 'Staff', color: 'bg-slate-600', dot: 'bg-slate-500' };
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm transition-all">

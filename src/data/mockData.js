@@ -688,5 +688,17 @@ export const INITIAL_USERS = [
     role: "admin",
     dept: "Hospital Operations",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100"
+  },
+  {
+    id: "usr-5",
+    username: "receptionist",
+    email: "receptionist@mediconnect.in",
+    phone: "+91 98888 77777",
+    password: "desk123",
+    securityPin: "7777",
+    name: "Priya Sharma",
+    role: "receptionist",
+    assignedDoctorId: "doc-1",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100"
   }
 ];

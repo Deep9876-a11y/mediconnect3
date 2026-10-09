@@ -3,6 +3,7 @@ import { Icons } from '../../components/Icons.jsx';
 import { PatientHistoryModal } from './PatientHistoryModal.jsx';
 import { PrescriptionModal } from './PrescriptionModal.jsx';
 import { SlotManager } from './SlotManager.jsx';
+import { ManageReceptionist } from './ManageReceptionist.jsx';
 
 export function DoctorPortal({
   appointments,
@@ -104,6 +105,18 @@ export function DoctorPortal({
               >
                 <Icons.Calendar className="w-4 h-4" />
                 <span>Availability & Calendar</span>
+              </button>
+
+              <button
+                onClick={() => setActiveSubTab('staff')}
+                className={`px-3.5 py-1.5 rounded-xl transition-all flex items-center space-x-1.5 ${
+                  activeSubTab === 'staff'
+                    ? 'bg-sky-700 text-white shadow-sm'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                <Icons.Users className="w-4 h-4" />
+                <span>Manage Staff</span>
               </button>
             </div>
           </div>
@@ -278,10 +291,15 @@ export function DoctorPortal({
               )}
             </div>
           </>
-        ) : (
+        ) : activeSubTab === 'availability' ? (
           <SlotManager
             doctor={currentDoctor}
             onUpdateDoctor={onUpdateDoctor}
+            showToast={showToast}
+          />
+        ) : (
+          <ManageReceptionist
+            doctor={currentDoctor}
             showToast={showToast}
           />
         )}

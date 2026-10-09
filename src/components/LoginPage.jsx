@@ -44,6 +44,20 @@ const ROLE_CONFIG = {
     demoPhone: '+91 98999 00000',
     demoPin: '9999',
     tagline: 'Hospital KPI dashboard, doctor roster & operational analytics'
+  },
+  receptionist: {
+    label: 'Receptionist Portal',
+    icon: 'Users',
+    gradient: 'from-fuchsia-600 to-pink-600',
+    bg: 'from-fuchsia-50 to-pink-50',
+    border: 'border-fuchsia-200',
+    ring: 'ring-fuchsia-500',
+    badge: 'bg-fuchsia-100 text-fuchsia-800',
+    demoUser: 'receptionist@mediconnect.in',
+    demoPass: 'desk123',
+    demoPhone: '+91 98888 77777',
+    demoPin: '7777',
+    tagline: 'Manage OPD queue, book walk-in appointments & handle chat escalations'
   }
 };
 
@@ -83,7 +97,7 @@ export function LoginPage({ onLogin }) {
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
-    if (role === 'admin' && authMode === 'signup') {
+    if ((role === 'admin' || role === 'receptionist') && authMode === 'signup') {
       setAuthMode('login');
     }
     setError('');
@@ -291,12 +305,18 @@ export function LoginPage({ onLogin }) {
                       <span>Admin accounts are restricted to IT staff. Sign up is disabled for security.</span>
                     </div>
                   )}
+                  {selectedRole === 'receptionist' && (
+                    <div className="mt-2.5 px-3 py-1.5 bg-black/30 border border-white/20 rounded-xl text-[11px] text-fuchsia-100 flex items-center space-x-2">
+                      <Icons.ShieldCheck className="w-4 h-4 text-amber-300 flex-shrink-0" />
+                      <span>Receptionist accounts are created by Doctors. Sign up is disabled.</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-6">
                   {/* Role Switcher (Bullets) */}
                   <div className="flex justify-center items-center space-x-6 mb-5 bg-slate-50/50 p-3 rounded-xl border border-slate-200">
-                    {['patient', 'doctor', 'admin'].map((role) => (
+                    {['patient', 'doctor', 'admin', 'receptionist'].map((role) => (
                       <label key={role} className="flex items-center space-x-2 cursor-pointer group">
                         <input
                           type="radio"
@@ -304,7 +324,7 @@ export function LoginPage({ onLogin }) {
                           value={role}
                           checked={selectedRole === role}
                           onChange={() => handleRoleSelect(role)}
-                          className={`w-4 h-4 cursor-pointer focus:ring-2 focus:ring-offset-1 ${role === 'patient' ? 'text-teal-600 focus:ring-teal-500' : role === 'doctor' ? 'text-sky-600 focus:ring-sky-500' : 'text-indigo-600 focus:ring-indigo-500'}`}
+                          className={`w-4 h-4 cursor-pointer focus:ring-2 focus:ring-offset-1 ${role === 'patient' ? 'text-teal-600 focus:ring-teal-500' : role === 'doctor' ? 'text-sky-600 focus:ring-sky-500' : role === 'admin' ? 'text-indigo-600 focus:ring-indigo-500' : 'text-fuchsia-600 focus:ring-fuchsia-500'}`}
                         />
                         <span className={`text-xs font-bold capitalize transition-colors ${selectedRole === role ? 'text-slate-900' : 'text-slate-500 group-hover:text-slate-700'}`}>{role}</span>
                       </label>
@@ -402,7 +422,7 @@ export function LoginPage({ onLogin }) {
                         )}
                       </button>
 
-                      {selectedRole !== 'admin' && (
+                      {selectedRole !== 'admin' && selectedRole !== 'receptionist' && (
                         <div className="text-center pt-2">
                           <p className="text-xs text-slate-500">
                             Don't have an account?{' '}
@@ -665,14 +685,14 @@ export function LoginPage({ onLogin }) {
           <div className="bg-slate-800/90 backdrop-blur-sm rounded-xl p-3 border border-slate-700 shadow-2xl flex flex-col space-y-2 hover:bg-slate-800 transition-colors">
             <div className="flex items-center space-x-2">
               <Icons.Activity className="w-3.5 h-3.5 text-teal-400" />
-              <span className="text-[10px] font-bold text-teal-400 uppercase tracking-wider">Demo Access</span>
+              <span className="text-[10px] font-bold text-teal-400 uppercase tracking-wider">Quick Access</span>
             </div>
             <div className="flex space-x-2">
               <button
                 type="button"
                 onClick={() => { setIdentifier(ROLE_CONFIG.patient.demoUser); setPassword(ROLE_CONFIG.patient.demoPass); }}
                 className="p-2 bg-slate-700 hover:bg-slate-600 text-teal-300 rounded-lg transition"
-                title="Patient Demo"
+                title="Patient Login"
               >
                 <Icons.User className="w-4 h-4" />
               </button>
@@ -680,7 +700,7 @@ export function LoginPage({ onLogin }) {
                 type="button"
                 onClick={() => { setIdentifier(ROLE_CONFIG.doctor.demoUser); setPassword(ROLE_CONFIG.doctor.demoPass); }}
                 className="p-2 bg-slate-700 hover:bg-slate-600 text-sky-300 rounded-lg transition"
-                title="Doctor Demo"
+                title="Doctor Login"
               >
                 <Icons.Stethoscope className="w-4 h-4" />
               </button>
@@ -688,13 +708,22 @@ export function LoginPage({ onLogin }) {
                 type="button"
                 onClick={() => { setIdentifier(ROLE_CONFIG.admin.demoUser); setPassword(ROLE_CONFIG.admin.demoPass); }}
                 className="p-2 bg-slate-700 hover:bg-slate-600 text-indigo-300 rounded-lg transition"
-                title="Admin Demo"
+                title="Admin Login"
               >
                 <Icons.ShieldCheck className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => { setIdentifier(ROLE_CONFIG.receptionist.demoUser); setPassword(ROLE_CONFIG.receptionist.demoPass); }}
+                className="p-2 bg-slate-700 hover:bg-slate-600 text-fuchsia-300 rounded-lg transition"
+                title="Receptionist Login"
+              >
+                <Icons.Users className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
+
 
       </div>
     </div>

@@ -411,6 +411,9 @@ export const apiService = {
 
   // ── USER AUTH & SECURITY ──────────────────────────────────────────────────
   async getUsers() {
+    const data = await apiFetch('/users');
+    if (data) return data;
+    await delay();
     return getStored(STORAGE_KEYS.USERS, INITIAL_USERS);
   },
 
@@ -452,7 +455,8 @@ export const apiService = {
       status: userData.role === 'doctor' ? 'pending' : 'active',
       uhid: userData.role === 'patient' ? `MC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}` : undefined,
       dept: userData.dept || (userData.role === 'doctor' ? 'General Medicine' : undefined),
-      avatar: userData.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100'
+      avatar: userData.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100',
+      assignedDoctorId: userData.assignedDoctorId
     };
 
     const updatedUsers = [...users, newUser];
@@ -487,7 +491,7 @@ export const apiService = {
       method: 'POST',
       body: { identifier, password, role }
     });
-    if (backendRes) {
+    if (backendRes && backendRes.success) {
       return backendRes;
     }
 

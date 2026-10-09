@@ -47,6 +47,14 @@ class MediConnectHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-User-Role')
         self.end_headers()
 
+    def end_headers(self):
+        # Prevent caching for frontend files
+        if self.path == '/' or self.path.endswith('.html') or self.path.endswith('.jsx') or self.path.endswith('.js') or self.path.endswith('.css'):
+            self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
+        super().end_headers()
+
     def get_role_header(self):
         return self.headers.get('X-User-Role', 'patient')
 
@@ -128,6 +136,9 @@ class MediConnectHandler(http.server.SimpleHTTPRequestHandler):
             elif path == '/api/share-links':
                 links = backend_db.api_get_share_links('pat-1')
                 return self.send_json(200, links)
+
+            elif path == '/api/users':
+                return self.send_json(200, backend_db.api_get_users())
 
             else:
                 return self.send_json(404, {'error': f'Route not found: {path}'})

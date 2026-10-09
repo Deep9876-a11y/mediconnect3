@@ -32,7 +32,8 @@ def init_db():
         role TEXT NOT NULL,
         password TEXT NOT NULL,
         security_pin TEXT DEFAULT '1234',
-        created_at TEXT
+        created_at TEXT,
+        assigned_doctor_id TEXT
     )
     ''')
 
@@ -747,7 +748,8 @@ def api_login_user(identifier, password, role):
             'phone': u.get('phone'),
             'username': u.get('username'),
             'role': u.get('role'),
-            'securityPin': u.get('security_pin')
+            'securityPin': u.get('security_pin'),
+            'assignedDoctorId': u.get('assigned_doctor_id')
         }
     }
 
@@ -768,9 +770,9 @@ def api_register_user(data):
 
     try:
         c.execute('''
-        INSERT INTO users (id, name, email, phone, username, role, password, security_pin, created_at)
-        VALUES (?,?,?,?,?,?,?,?,?)
-        ''', (user_id, data.get('name'), email, phone, username, data.get('role'), data.get('password'), pin, now))
+        INSERT INTO users (id, name, email, phone, username, role, password, security_pin, created_at, assigned_doctor_id)
+        VALUES (?,?,?,?,?,?,?,?,?,?)
+        ''', (user_id, data.get('name'), email, phone, username, data.get('role'), data.get('password'), pin, now, data.get('assignedDoctorId')))
         
         # If registering as patient, create patient profile
         if data.get('role') == 'patient':
@@ -784,7 +786,7 @@ def api_register_user(data):
 
         conn.commit()
         conn.close()
-        return {'success': True, 'user': {'id': user_id, 'name': data.get('name'), 'email': email, 'role': data.get('role'), 'securityPin': pin}}
+        return {'success': True, 'user': {'id': user_id, 'name': data.get('name'), 'email': email, 'role': data.get('role'), 'securityPin': pin, 'assignedDoctorId': data.get('assignedDoctorId')}}
     except sqlite3.IntegrityError:
         conn.close()
         return {'success': False, 'error': 'An account with this email or phone number already exists.'}
@@ -810,3 +812,18 @@ def api_reset_password(identifier, otp, pin, new_pass):
     conn.commit()
     conn.close()
     return {'success': True, 'message': 'Password reset successfully! You can now login.'}
+
+def api_get_users():
+    conn = get_db()
+    c = conn.cursor()
+    c.execute('SELECT * FROM users')
+    rows = c.fetchall()
+    conn.close()
+    users = []
+    for r in rows:
+        u = dict(r)
+        # map assigned_doctor_id to assignedDoctorId
+        if 'assigned_doctor_id' in u:
+            u['assignedDoctorId'] = u['assigned_doctor_id']
+        users.append(u)
+    return users

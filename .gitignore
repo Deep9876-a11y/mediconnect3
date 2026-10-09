@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+~$*.docx
+.env
+.env.local
+.DS_Store
