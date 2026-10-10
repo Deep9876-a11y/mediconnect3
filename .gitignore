@@ -1,8 +1,33 @@
+# Dependencies
 node_modules/
+
+# Python cache & bytecode
 __pycache__/
 *.py[cod]
 *$py.class
-~$*.docx
+*.pyd
+
+# Temporary browser automation & test profiles
+temp_*
+chrome_temp_profile/
+*.tmp
+
+# Environment & local secrets
 .env
 .env.local
+.env.*.local
+
+# Operating System & Office temp files
 .DS_Store
+Thumbs.db
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# IDE & Editor folders
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
