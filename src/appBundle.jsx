@@ -874,8 +874,8 @@ const firebaseService = {
 
 // ==================== src/api/apiService.js ====================
 /**
- * MediConnect API Service v2.0
- * All calls now hit the real Node.js + SQLite backend at localhost:5000.
+ * MediConnect API Service v2.5
+ * Unified Data Access Layer communicating with Python SQLite Backend (/api)
  * Falls back gracefully to localStorage mock data if the server is offline.
  */
 

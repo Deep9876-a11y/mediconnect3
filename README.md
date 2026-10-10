@@ -109,31 +109,41 @@ As specified in project requirements, conversational AI / RAG is reserved for Ph
 ```
 c:\Users\hp\HMS\
 ├── index.html                   # Master entry point with Tailwind CDN, Google Fonts & React UMD
+├── run.py                       # Python Web Server & REST API router (Zero-dependency)
+├── backend_db.py                # SQLite Persistent Database Layer (mediconnect.db)
+├── mediconnect.db               # Production SQLite database file
 ├── build_bundle.py              # Script that packages modular JSX components into appBundle.jsx
+├── rebuild_index.py             # Injects appBundle.jsx directly into index.html
 ├── src/
 │   ├── appBundle.jsx            # Unified application script compiled by Babel in browser
 │   ├── App.jsx                  # Root component & global state router
 │   ├── api/
-│   │   └── apiService.js        # Pluggable asynchronous API layer with localStorage caching
+│   │   ├── apiService.js        # Unified Data Access Layer (REST API + LocalStorage fallback)
+│   │   └── firebaseService.js   # Google Cloud Firestore dual-sync integration
 │   ├── data/
-│   │   └── mockData.js          # Realistic clinical datasets (doctors, appointments, tests)
+│   │   └── mockData.js          # Clinical datasets & seed schemas
 │   ├── components/
 │   │   ├── Icons.jsx            # Self-contained SVG Icon library (stethoscope, heartbeat, etc.)
 │   │   ├── Navbar.jsx           # Top emergency bar, brand logo, role switcher pills
 │   │   ├── RoleModal.jsx        # Demo perspective selector modal
-│   │   ├── AiAssistantModal.jsx # Phase 2 AI triage placeholder modal
+│   │   ├── AiAssistantModal.jsx # AI Clinical Assistant modal
+│   │   ├── CloudDatabaseModal.jsx # Cloud sync & Firestore management modal
+│   │   ├── LoginPage.jsx        # Multi-role authentication page
 │   │   └── Toast.jsx            # Floating action feedback alert
 │   └── portals/
 │       ├── patient/             # Patient Portal views (Search, Booking, Tracker, Records, Profile)
 │       ├── doctor/              # Doctor Portal views (Queue, Patient History, Prescription, Slots)
-│       └── admin/               # Admin Portal views (Dashboard, Doctors, Departments, Analytics)
-├── server/
-│   ├── package.json             # Node.js Express backend dependencies
-│   └── server.js                # Express REST API routes skeleton ready for Phase 2
+│       ├── receptionist/        # Receptionist OPD Desk (Tokens, Queue Triage)
+│       ├── admin/               # Admin Portal views (Dashboard, Doctors, Departments, Analytics)
+│       └── shared/              # Pan-India Secure EHR Sharing View
 └── README.md                    # Project documentation & pitch guide
 ```
 
 ---
 
-## 🔌 Connecting Real Node.js Backend (Phase 2)
-The frontend communicates exclusively through `src/api/apiService.js`. When transitioning to a production database (e.g. MongoDB or PostgreSQL), you only need to swap the simulated delay functions in `apiService.js` with standard `fetch('/api/...')` calls pointing to `server/server.js`.
+## 🌐 Running the Web Application
+Simply run the Python web server:
+```bash
+python run.py
+```
+This serves the complete web application with SQLite REST APIs on `http://localhost:5173` and automatically opens your browser.

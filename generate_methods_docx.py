@@ -152,18 +152,17 @@ modules_widths = [1.8, 1.8, 2.6, 0.8]
 mod_table = create_table_with_headers(doc, modules_headers, modules_widths)
 
 module_inventory = [
-    ("Backend Database Layer", "backend_db.py", "SQLite schema init, migrations, CRUD operations, PHI masking", "16 methods"),
-    ("Python HTTP API Server", "run.py", "Lightweight HTTP server, REST request routing, port fallback", "10 methods"),
-    ("Node.js Express Server", "server/server.js", "Express routing, better-sqlite3 engine, REST endpoints", "18 endpoints"),
-    ("Frontend API Service", "src/api/apiService.js", "Unified data access layer, local storage fallback, dual-sync", "22 methods"),
-    ("Firebase Cloud Sync", "src/api/firebaseService.js", "Google Cloud Firestore multi-device real-time sync", "6 methods"),
+    ("Backend Database Layer", "backend_db.py", "SQLite schema init, migrations, CRUD operations, PHI masking", "25 methods"),
+    ("Python HTTP API Server", "run.py", "Lightweight HTTP server, REST request routing, port fallback", "14 methods"),
+    ("Frontend API Service", "src/api/apiService.js", "Unified data access layer, local storage fallback, dual-sync", "36 methods"),
+    ("Firebase Cloud Sync", "src/api/firebaseService.js", "Google Cloud Firestore multi-device real-time sync", "7 methods"),
     ("AI & NLP Clinical Engine", "src/components/AiAssistantModal.jsx", "Intent classification, clinical response generation, triage", "5 methods"),
-    ("Auth & Identity Management", "src/components/LoginPage.jsx", "Multi-role login, OTP/PIN reset, doctor verification", "12 methods"),
-    ("Doctor Portal & EHR", "src/portals/doctor/*", "OPD queue triage, digital prescriptions, slot manager, receptionist", "16 methods"),
-    ("Patient Portal & Booking", "src/portals/patient/*", "Doctor search, slot booking, lab tracking, profile settings", "14 methods"),
-    ("Receptionist Desk Portal", "src/portals/receptionist/*", "Queue status updates, walk-in tokens, doctor roster monitoring", "6 methods"),
-    ("Admin Management & Stats", "src/portals/admin/*", "Department/Doctor CRUD, revenue analytics, audit trails", "10 methods"),
-    ("Pan-India Shared EHR", "src/portals/shared/*", "Passcode & OTP-protected doctor-patient records sharing", "8 methods")
+    ("Auth & Identity Management", "src/components/LoginPage.jsx", "Multi-role login, OTP/PIN reset, doctor verification", "8 methods"),
+    ("Doctor Portal & EHR", "src/portals/doctor/*", "OPD queue triage, digital prescriptions, slot manager, receptionist", "9 methods"),
+    ("Patient Portal & Booking", "src/portals/patient/*", "Doctor search, slot booking, lab tracking, profile settings", "7 methods"),
+    ("Receptionist Desk Portal", "src/portals/receptionist/*", "Queue status updates, walk-in tokens, doctor roster monitoring", "5 methods"),
+    ("Admin Management & Stats", "src/portals/admin/*", "Department/Doctor CRUD, revenue analytics, audit trails", "5 methods"),
+    ("Pan-India Shared EHR", "src/portals/shared/*", "Passcode & OTP-protected doctor-patient records sharing", "4 methods")
 ]
 
 for idx, row in enumerate(module_inventory):
@@ -257,49 +256,7 @@ add_method_section(
     run_py_methods
 )
 
-# ── 4. Node.js Express Server ─────────────────────────────────────────────────
-server_js_methods = [
-    ("doctorRow(row)", "row: sqlite3.Row", "object", "Maps raw database doctor columns to frontend camelCase object and parses JSON available_slots/languages."),
-    ("deptRow(row)", "row: sqlite3.Row", "object", "Maps department table columns to JSON schema including color, room, and lead doctor."),
-    ("patientRow(row)", "row: sqlite3.Row", "object", "Maps patient columns, parsing JSON allergies, chronicConditions, and emergencyContact."),
-    ("apptRow(row)", "row: sqlite3.Row", "object", "Normalizes appointment records with doctor name, token number, and prescription link."),
-    ("rxRow(row)", "row: sqlite3.Row", "object", "Transforms prescription records, parsing JSON medications list and dosage schedules."),
-    ("labRow(row)", "row: sqlite3.Row", "object", "Parses diagnostic results JSON structure with reference normal ranges and high/low flags."),
-    ("sampleRow(row)", "row: sqlite3.Row", "object", "Maps home sample collection orders with assigned phlebotomist info and live 5-stage timeline."),
-    ("GET /api/health", "None", "JSON", "Returns server health status, database name, and timestamp."),
-    ("GET /api/departments", "None", "JSON Array", "Returns all 8 hospital departments with doctor count and location."),
-    ("POST /api/departments", "Body: Dept Data", "JSON Object", "Creates a new department in better-sqlite3 database."),
-    ("GET /api/doctors", "Query: department?", "JSON Array", "Fetches list of doctors with optional department filter."),
-    ("GET /api/doctors/:id", "Param: id", "JSON Object", "Fetches full profile, reviews, and slots for a single doctor."),
-    ("POST /api/doctors", "Body: Doctor Data", "JSON Object", "Adds a new doctor to the roster with verified credentials."),
-    ("PUT /api/doctors/:id", "Param: id, Body: Updates", "JSON Object", "Updates doctor fees, room number, slots, or bio."),
-    ("GET /api/patients/current", "None", "JSON Object", "Fetches logged-in patient demographic and clinical profile."),
-    ("PUT /api/patients/current", "Body: Profile Data", "JSON Object", "Updates patient contact info, allergies, and chronic conditions."),
-    ("GET /api/appointments", "Query: patientId?, doctorId?", "JSON Array", "Fetches appointment list with doctor or patient filtering."),
-    ("POST /api/appointments", "Body: Booking Data", "JSON Object", "Books new appointment and assigns token number."),
-    ("PATCH /api/appointments/:id/status", "Param: id, Body: status", "JSON Object", "Updates appointment status to Scheduled, Completed, or Cancelled."),
-    ("GET /api/prescriptions", "None", "JSON Array", "Returns list of all digital prescriptions."),
-    ("POST /api/prescriptions", "Body: Rx Data", "JSON Object", "Creates prescription and marks associated appointment as Completed."),
-    ("GET /api/lab/reports", "None", "JSON Array", "Returns patient laboratory test results and diagnostic status."),
-    ("GET /api/lab/packages", "None", "JSON Array", "Returns available diagnostic health packages (CBC, CMP, Lipid, Thyroid, Full Body)."),
-    ("GET /api/lab/home-sample", "None", "JSON Array", "Returns all home sample pickup orders."),
-    ("POST /api/lab/home-sample", "Body: Order Data", "JSON Object", "Books a home sample collection and creates initial 5-stage timeline."),
-    ("PATCH /api/lab/orders/:id/status", "Param: id, Body: status", "JSON Object", "Advances doorstep sample collection stage and assigns phlebotomist."),
-    ("GET /api/admin/stats", "None", "JSON Object", "Calculates aggregated hospital metrics (revenue, bed occupancy, doctor roster count)."),
-    ("GET /api/chat/history", "Query: sessionId", "JSON Array", "Retrieves conversational history for AI health assistant."),
-    ("POST /api/chat/message", "Body: Message Data", "JSON Object", "Saves user or bot message in SQLite chat store."),
-    ("DELETE /api/chat/history", "Query: sessionId", "JSON Object", "Clears chat session history for patient.")
-]
-
-add_method_section(
-    4, "Node.js + Express + better-sqlite3 Backend Server", "server/server.js",
-    "High-performance alternative Node.js backend using better-sqlite3 with WAL (Write-Ahead Logging) mode. Provides full REST endpoints, sample order tracking, and AI chat persistence.",
-    ["Endpoint / Method", "Parameters / Body", "Return Type", "Description & Implementation Role"],
-    [1.8, 1.4, 1.1, 2.7],
-    server_js_methods
-)
-
-# ── 5. Frontend API Service & Dual-Sync ───────────────────────────────────────
+# ── 4. Frontend API Service & Dual-Sync ───────────────────────────────────────
 api_service_methods = [
     ("timeoutSignal(ms)", "ms: int", "AbortSignal", "Creates an AbortSignal that automatically aborts after specified milliseconds for network resiliency."),
     ("getStored(key, fallback)", "key: str, fallback: any", "any", "Safely retrieves and JSON-parses values from browser localStorage with fallback."),
@@ -340,14 +297,14 @@ api_service_methods = [
 ]
 
 add_method_section(
-    5, "Frontend Unified Data Access Layer (apiService)", "src/api/apiService.js",
+    4, "Frontend Unified Data Access Layer (apiService)", "src/api/apiService.js",
     "Serves as the central data gateway for all React components. Employs a hybrid strategy: queries the active backend when available and gracefully falls back to persistent localStorage.",
     ["Method Name", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     api_service_methods
 )
 
-# ── 6. Firebase Cloud Firestore Integration Service ───────────────────────────
+# ── 5. Firebase Cloud Firestore Integration Service ───────────────────────────
 firebase_methods = [
     ("getConfig()", "None", "object", "Retrieves active Firebase configuration credentials from localStorage or defaults."),
     ("saveConfig(newConfig)", "newConfig: object", "bool", "Saves custom Firebase API keys, project ID, and re-initializes cloud connection."),
@@ -359,14 +316,14 @@ firebase_methods = [
 ]
 
 add_method_section(
-    6, "Firebase Cloud Database Service (firebaseService)", "src/api/firebaseService.js",
+    5, "Firebase Cloud Database Service (firebaseService)", "src/api/firebaseService.js",
     "Enables real-time multi-device cloud synchronization across India using Google Cloud Firestore (asia-south1 region). Implements dual-sync architecture alongside local SQLite.",
     ["Method Name", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     firebase_methods
 )
 
-# ── 7. AI Health Assistant & Clinical NLP Engine ──────────────────────────────
+# ── 6. AI Health Assistant & Clinical NLP Engine ──────────────────────────────
 ai_methods = [
     ("detectIntent(text)", "text: str", "str", "Extracts clinical intent using NLP regex rules (greet, appointment, doctor, department, prescription, lab, symptom, emergency, hours, location, billing, cancel, farewell, help)."),
     ("generateReply(intent, text, context)", "intent: str, text: str, context: object", "str", "Synthesizes personalized medical response using live patient EHR, upcoming doctor schedules, and department roster."),
@@ -376,14 +333,14 @@ ai_methods = [
 ]
 
 add_method_section(
-    7, "AI Health Assistant & Clinical Intelligence", "src/components/AiAssistantModal.jsx",
+    6, "AI Health Assistant & Clinical Intelligence", "src/components/AiAssistantModal.jsx",
     "Provides an AI-driven conversational health assistant capable of triaging symptoms, recommending hospital departments, looking up doctor availability, and explaining prescriptions in plain language.",
     ["Function / Component", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     ai_methods
 )
 
-# ── 8. Authentication, Authorization & Navigation ─────────────────────────────
+# ── 7. Authentication, Authorization & Navigation ─────────────────────────────
 auth_methods = [
     ("LoginPage({ onLoginSuccess })", "onLoginSuccess: function", "JSX.Element", "Main multi-role authentication portal supporting Doctor, Patient, Receptionist, and Administrator."),
     ("handleLoginSubmit(e)", "e: FormEvent", "Promise<void>", "Validates form fields, calls apiService.loginUser, triggers toast alerts, and routes to portal."),
@@ -396,14 +353,14 @@ auth_methods = [
 ]
 
 add_method_section(
-    8, "Authentication, Security & Navigation Components", "src/components/LoginPage.jsx, Navbar.jsx",
+    7, "Authentication, Security & Navigation Components", "src/components/LoginPage.jsx, Navbar.jsx",
     "Implements multi-tenant role-based access control (RBAC), multi-factor PIN verification, emergency hotlines, and instant role switching.",
     ["Method / Component", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     auth_methods
 )
 
-# ── 9. Doctor Portal & Clinical Workflows ──────────────────────────────────────
+# ── 8. Doctor Portal & Clinical Workflows ──────────────────────────────────────
 doctor_methods = [
     ("DoctorPortal({ currentUser, ... })", "Portal Props", "JSX.Element", "Doctor workstation dashboard with live queue, OPD token counter, patient history, and prescription tools."),
     ("handleConsultPatient(appointment)", "appointment: object", "void", "Opens patient clinical record and initializes new prescription workspace."),
@@ -417,14 +374,14 @@ doctor_methods = [
 ]
 
 add_method_section(
-    9, "Doctor Clinical Portal & OPD Workflows", "src/portals/doctor/*",
+    8, "Doctor Clinical Portal & OPD Workflows", "src/portals/doctor/*",
     "Empowers physicians with high-speed OPD queue management, digital prescription writing, historical EHR inspection, and staff delegation tools.",
     ["Method / Component", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     doctor_methods
 )
 
-# ── 10. Patient Portal & Self-Service ──────────────────────────────────────────
+# ── 9. Patient Portal & Self-Service ──────────────────────────────────────────
 patient_methods = [
     ("PatientHome({ patient, appointments, ... })", "Props", "JSX.Element", "Patient homepage with quick health stats, upcoming tokens, recent prescriptions, and lab status."),
     ("DoctorSearch({ doctors, departments, ... })", "Props", "JSX.Element", "Specialty and department-based doctor discovery directory with fees, ratings, and experience filters."),
@@ -436,14 +393,14 @@ patient_methods = [
 ]
 
 add_method_section(
-    10, "Patient Self-Service Portal & EHR Locker", "src/portals/patient/*",
+    9, "Patient Self-Service Portal & EHR Locker", "src/portals/patient/*",
     "Provides patients with seamless OPD appointment booking, longitudinal diagnostic record viewing, doorstep phlebotomy tracking, and secure record sharing.",
     ["Method / Component", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     patient_methods
 )
 
-# ── 11. Receptionist Desk Portal ───────────────────────────────────────────────
+# ── 10. Receptionist Desk Portal ───────────────────────────────────────────────
 receptionist_methods = [
     ("ReceptionistPortal({ currentUser, ... })", "Props", "JSX.Element", "OPD reception desk dashboard for managing walk-in patient tokens and doctor queues."),
     ("handleGenerateWalkInToken(formData)", "formData: object", "Promise<void>", "Issues instant on-the-spot OPD queue token for walk-in patients without prior online booking."),
@@ -453,14 +410,14 @@ receptionist_methods = [
 ]
 
 add_method_section(
-    11, "Hospital Receptionist & OPD Queue Desk", "src/portals/receptionist/*",
+    10, "Hospital Receptionist & OPD Queue Desk", "src/portals/receptionist/*",
     "Streamlines hospital front-desk operations, queue triage, walk-in token issuance, and doctor-room coordination.",
     ["Method / Component", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     receptionist_methods
 )
 
-# ── 12. Admin Management & Analytics ──────────────────────────────────────────
+# ── 11. Admin Management & Analytics ──────────────────────────────────────────
 admin_methods = [
     ("AdminPortal({ adminStats, ... })", "Props", "JSX.Element", "Hospital administrative dashboard with revenue counters, bed occupancy charts, and staff rosters."),
     ("ManageDepartments({ departments, onAddDept })", "Props", "JSX.Element", "Administrative module for creating, editing, and assigning rooms to hospital wings."),
@@ -470,14 +427,14 @@ admin_methods = [
 ]
 
 add_method_section(
-    12, "Hospital Administration & Governance", "src/portals/admin/*",
+    11, "Hospital Administration & Governance", "src/portals/admin/*",
     "Provides hospital IT administrators with department structuring, medical staff verification, financial analytics, and regulatory audit trail exports.",
     ["Method / Component", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
     admin_methods
 )
 
-# ── 13. Pan-India Secure EHR Sharing (Shared EHR) ──────────────────────────────
+# ── 12. Pan-India Secure EHR Sharing (Shared EHR) ──────────────────────────────
 shared_ehr_methods = [
     ("DoctorSharedEhrView()", "None", "JSX.Element", "Secure stand-alone portal for consulting physicians across India to view shared patient records."),
     ("handlePasscodeUnlock(passcode)", "passcode: str", "Promise<void>", "Validates token and password against database, decrypts EHR, and logs doctor IP/location."),
@@ -486,7 +443,7 @@ shared_ehr_methods = [
 ]
 
 add_method_section(
-    13, "Pan-India Secure EHR Sharing Portal", "src/portals/shared/DoctorSharedEhrView.jsx",
+    12, "Pan-India Secure EHR Sharing Portal", "src/portals/shared/DoctorSharedEhrView.jsx",
     "Enables zero-friction second opinions across India. Patients generate time-limited, password-protected tokens that allow any registered physician in India to review records and issue prescriptions securely.",
     ["Method / Component", "Parameters", "Return Type", "Description & Implementation Role"],
     [1.8, 1.4, 1.1, 2.7],
